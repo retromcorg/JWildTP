@@ -1,0 +1,13 @@
+name: JWildTP
+main: com.johnymuffin.beta.wildtp.JWildTP
+version: 1.0.0
+author: JohnyMuffin
+description: A plugin to randomly teleport
+commands:
+  wild:
+    description: A command to randomly teleport
+    usage: /<command>
+    aliases: [random]
+permissions:
+  jwildtp.wild:
+    description: Allows a player to randomly teleport

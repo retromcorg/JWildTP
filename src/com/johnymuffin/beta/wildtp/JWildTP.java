@@ -2,7 +2,9 @@ package com.johnymuffin.beta.wildtp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +22,7 @@ public class JWildTP extends JavaPlugin {
     private String pluginName;
     private PluginDescriptionFile pdf;
     private JWildTPConfig config;
-    private HashMap<UUID, Integer> coolDown = new HashMap<>();
+    private HashMap<String, Long> coolDown = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -38,11 +40,21 @@ public class JWildTP extends JavaPlugin {
         JWildTPLanguage.getInstance(plugin);
 
         WorldListener worldListener = new WorldListener();
-        Bukkit.getServer().getPluginManager().registerEvents(worldListener, plugin);
+        Bukkit.getServer().getPluginManager().registerEvent(Event.Type.WORLD_LOAD, worldListener, Event.Priority.Normal, plugin);
 
-        Bukkit.getPluginCommand("wild").setExecutor(new JWildTPCommand(plugin));
+        Bukkit.getServer().getPluginCommand("wild").setExecutor(new JWildTPCommand(plugin));
+
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            Long currentUnix = System.currentTimeMillis() / 1000L;
+            plugin.getCoolDown().keySet().removeIf(key -> {
+                Long expiry = plugin.getCoolDown().get(key);
+                return (expiry < currentUnix);
+            });
+        }, 20L, 6000);
+
 
         log.info("[" + pluginName + "] Is Loaded");
+
     }
 
     @Override
@@ -51,19 +63,19 @@ public class JWildTP extends JavaPlugin {
     }
 
     public void logger(Level level, String message) {
-        Bukkit.getLogger().log(level, "[" + pluginName + "] " + message);
+        Bukkit.getServer().getLogger().log(level, "[" + pluginName + "] " + message);
     }
 
     public JWildTPConfig getConfig() {
         return config;
     }
 
-    public HashMap<UUID, Integer> getCoolDown() {
+    public HashMap<String, Long> getCoolDown() {
         return coolDown;
     }
 
 
-    public class WorldListener implements Listener {
+    public class WorldListener extends org.bukkit.event.world.WorldListener {
 
         public void onWorldLoad(WorldLoadEvent event) {
             config.writeWorld(event.getWorld().getName());

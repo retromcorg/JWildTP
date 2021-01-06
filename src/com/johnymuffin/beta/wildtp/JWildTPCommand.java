@@ -37,9 +37,9 @@ public class JWildTPCommand implements CommandExecutor {
             return true;
         }
 
-        if (plugin.getCoolDown().containsKey(player.getUniqueId())) {
-            if (plugin.getCoolDown().get(player.getUniqueId()) > (System.currentTimeMillis() / 1000L)) {
-                int coolDownLeft = (int) (plugin.getCoolDown().get(player.getUniqueId()) - (System.currentTimeMillis() / 1000L));
+        if (plugin.getCoolDown().containsKey(player.getName())) {
+            if (plugin.getCoolDown().get(player.getName()) > (System.currentTimeMillis() / 1000L)) {
+                int coolDownLeft = (int) (plugin.getCoolDown().get(player.getName()) - (System.currentTimeMillis() / 1000L));
                 commandSender.sendMessage(ChatColor.RED + "Sorry, you can't randomly teleport for another " + coolDownLeft + " seconds");
                 return true;
             }
@@ -54,7 +54,7 @@ public class JWildTPCommand implements CommandExecutor {
             player.teleport(safeLocation);
             commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("teleport_successful"));
             plugin.logger(Level.INFO, "Randomly teleported " + player.getName() + " to " + safeLocation.getBlockX() + " " + safeLocation.getBlockY() + " " + safeLocation.getBlockZ() + " in world: " + safeLocation.getWorld().getName());
-            plugin.getCoolDown().put(player.getUniqueId(), (int) ((System.currentTimeMillis() / 1000L) + jWorld.getCoolDown()));
+            plugin.getCoolDown().put(player.getName(), (System.currentTimeMillis() / 1000L) + jWorld.getCoolDown());
             return true;
         } catch (Exception exception) {
             commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("teleport_unsuccessful"));

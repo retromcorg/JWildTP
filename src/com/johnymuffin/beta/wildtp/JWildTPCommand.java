@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
-import static com.johnymuffin.beta.wildtp.Utils.getSafeDestination;
-import static com.johnymuffin.beta.wildtp.Utils.isPlayerAuthorized;
+import static com.johnymuffin.beta.wildtp.JWildTPUtils.getSafeDestination;
+import static com.johnymuffin.beta.wildtp.JWildTPUtils.isPlayerAuthorized;
 
 public class JWildTPCommand implements CommandExecutor {
     private JWildTP plugin;
@@ -30,6 +30,11 @@ public class JWildTPCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) commandSender;
+
+        if (player.isInsideVehicle() || player.isSleeping()) {
+            commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("not_standing"));
+            return true;
+        }
 
         JWildTPWorld jWorld = plugin.getConfig().getWorld(player.getWorld().getName());
         if (!jWorld.isEnabled()) {
@@ -72,9 +77,8 @@ public class JWildTPCommand implements CommandExecutor {
     }
 
     private int randomFlip(int i) {
-        if (randomTrueOrFalse()) {
+        if (randomTrueOrFalse())
             return i;
-        }
         return -1 * i;
     }
 

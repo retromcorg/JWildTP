@@ -9,7 +9,41 @@ import org.bukkit.command.CommandSender;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Utils {
+public class JWildTPUtils {
+
+    public Location getRandomLocation(World world,
+                                      int minimumRadius,
+                                      int maximumRadius,
+                                      int centerX,
+                                      int centerZ) throws RandomTeleportException {
+        int randomX = randomFlip(randomNumber(minimumRadius, maximumRadius)) + centerX;
+        int randomZ = randomFlip(randomNumber(minimumRadius, maximumRadius)) + centerZ;
+        Location unsafeLocation = new Location(world, randomX, 90, randomZ);
+        try {
+            return getSafeDestination(unsafeLocation);
+        } catch (Exception exception) {
+            throw new RandomTeleportException(exception.getMessage());
+        }
+
+    }
+
+
+    private int randomNumber(int min, int max) {
+        return min + (int) (Math.random() * ((max - min) + 1));
+    }
+
+    private boolean randomTrueOrFalse() {
+        return Math.random() < 0.5;
+    }
+
+    private int randomFlip(int i) {
+        if (randomTrueOrFalse()) {
+            return i;
+        }
+        return -1 * i;
+    }
+
+
     //Essentials Code Start: com.earth2me.essentials.Util
     private static final Set<Integer> AIR_MATERIALS = new HashSet<Integer>();
 
@@ -107,6 +141,14 @@ public class Utils {
             return true;
         }
         return commandSender.hasPermission(permission);
+
+    }
+
+    public class RandomTeleportException extends Exception {
+
+        public RandomTeleportException(String exception) {
+            super(exception);
+        }
 
     }
 

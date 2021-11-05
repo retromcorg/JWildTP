@@ -29,6 +29,7 @@ public class JWildTPLanguage extends Configuration {
         map.put("world_disabled", "&cSorry, WildTP in your current world is disabled");
         map.put("teleport_successful", "&bYou have been randomly teleported");
         map.put("teleport_unsuccessful", "&cUnable to find a safe location to teleport you to. Try again later.");
+        map.put("not_standing", "&cUnable to teleport as you are inside a vehicle or bed.");
 
 
     }

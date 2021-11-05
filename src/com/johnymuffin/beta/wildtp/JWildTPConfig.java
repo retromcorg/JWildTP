@@ -20,7 +20,9 @@ public class JWildTPConfig extends Configuration {
     }
 
     private void write() {
-        //Nothing currently
+//        generateConfigOption("config.spawn.randomtp", true);
+//        generateConfigOption("config.spawn.info", "This setting allows for the server to teleport players randomly when they first join.");
+//        generateConfigOption("config.spawn.authme-support", false);
     }
 
 

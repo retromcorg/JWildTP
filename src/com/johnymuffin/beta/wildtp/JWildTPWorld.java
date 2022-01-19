@@ -8,13 +8,18 @@ public class JWildTPWorld {
     private final int maximumRadius;
     private final int coolDown;
 
-    public JWildTPWorld(boolean enabled, int centerX, int centerZ, int minimumRadius, int maximumRadius, int coolDown) {
+    private final boolean redirectWorld;
+    private final String worldName;
+
+    public JWildTPWorld(boolean enabled, int centerX, int centerZ, int minimumRadius, int maximumRadius, int coolDown, boolean redirectWorld, String redirectWorldName) {
         this.enabled = enabled;
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.minimumRadius = minimumRadius;
         this.maximumRadius = maximumRadius;
         this.coolDown = coolDown;
+        this.redirectWorld = redirectWorld;
+        this.worldName = redirectWorldName;
     }
 
 
@@ -40,5 +45,13 @@ public class JWildTPWorld {
 
     public int getCoolDown() {
         return coolDown;
+    }
+
+    public boolean isRedirectWorld() {
+        return redirectWorld;
+    }
+
+    public String getRedirectWorldName() {
+        return worldName;
     }
 }

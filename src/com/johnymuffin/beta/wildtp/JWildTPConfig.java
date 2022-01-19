@@ -36,6 +36,9 @@ public class JWildTPConfig extends Configuration {
         this.setProperty("worlds." + worldName + ".minimum-radius", 10);
         this.setProperty("worlds." + worldName + ".maximum-radius", 15);
         this.setProperty("worlds." + worldName + ".cool-down", 0);
+        //Redirect World Settings, Hello Meffy
+        this.setProperty("worlds." + worldName + ".redirect-world.enabled", false);
+        this.setProperty("worlds." + worldName + ".redirect-world.name", "world");
         this.save();
     }
 
@@ -46,7 +49,9 @@ public class JWildTPConfig extends Configuration {
                 this.getConfigInteger("worlds." + worldName + ".center.z"),
                 this.getConfigInteger("worlds." + worldName + ".minimum-radius"),
                 this.getConfigInteger("worlds." + worldName + ".maximum-radius"),
-                this.getConfigInteger("worlds." + worldName + ".cool-down"));
+                this.getConfigInteger("worlds." + worldName + ".cool-down"),
+                this.getConfigBoolean("worlds." + worldName + ".redirect-world.enabled"),
+                this.getConfigString("worlds." + worldName + ".redirect-world.name"));
     }
 
 

@@ -1,7 +1,9 @@
 package com.johnymuffin.beta.wildtp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,9 +39,26 @@ public class JWildTPCommand implements CommandExecutor {
         }
 
         JWildTPWorld jWorld = plugin.getConfig().getWorld(player.getWorld().getName());
-        if (!jWorld.isEnabled()) {
+        if (!jWorld.isEnabled() && !jWorld.isRedirectWorld()) {
             commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("world_disabled"));
             return true;
+        }
+
+        World world = player.getWorld();
+        //Redirect World Settings
+        if (jWorld.isRedirectWorld()) {
+            if (Bukkit.getServer().getWorld(jWorld.getRedirectWorldName()) == null) {
+                commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("invalid_world"));
+                return true;
+            }
+            jWorld = plugin.getConfig().getWorld(jWorld.getRedirectWorldName()); //Override current world
+            world = Bukkit.getServer().getWorld(jWorld.getRedirectWorldName());
+
+            //Rerun world enabled check
+            if (!jWorld.isEnabled()) {
+                commandSender.sendMessage(JWildTPLanguage.getInstance().getMessage("world_disabled"));
+                return true;
+            }
         }
 
         if (plugin.getCoolDown().containsKey(player.getName())) {
@@ -53,7 +72,7 @@ public class JWildTPCommand implements CommandExecutor {
         int randomX = randomFlip(randomNumber(jWorld.getMinimumRadius(), jWorld.getMaximumRadius())) + jWorld.getCenterX();
         int randomZ = randomFlip(randomNumber(jWorld.getMinimumRadius(), jWorld.getMaximumRadius())) + jWorld.getCenterZ();
 
-        Location unsafeLocation = new Location(player.getWorld(), randomX, 90, randomZ);
+        Location unsafeLocation = new Location(world, randomX, 90, randomZ);
         try {
             Location safeLocation = getSafeDestination(unsafeLocation);
             player.teleport(safeLocation);

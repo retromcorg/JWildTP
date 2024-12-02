@@ -7,7 +7,7 @@ commands:
   wild:
     description: A command to randomly teleport
     usage: /<command>
-    aliases: [random, rtp]
+    aliases: [random, randomtp, rtp]
 permissions:
   jwildtp.wild:
     description: Allows a player to randomly teleport
